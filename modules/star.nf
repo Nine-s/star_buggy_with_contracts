@@ -9,7 +9,7 @@ process STAR_INDEX_REFERENCE {
     output:
     path("star/*")
 
-    require(["""#!/usr/bin/env python3
+    require(["""exit 0
 import sys
 import os
 

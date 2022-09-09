@@ -10,7 +10,7 @@ process FASTP {
     path "${name}_fastp.json", emit: report_fastp_json
     path "${name}_fastp.html", emit: report_fastp_html
     
-    require(["""#!/usr/bin/env python3
+    require(["""exit 0
 import sys
 import os
 
@@ -36,7 +36,7 @@ for file in os.listdir():
                 counter = (counter + 1) % 4
 if counter != 0:
     sys.exit(1)"""])
-    promise([FOR_ALL("f", ITER("*_fastp.json"), {f -> IF_THEN(EMPTY_FILE(f), "exit 1")}), FOR_ALL("f", ITER("*.trimmed.fastq"), {f -> IF_THEN(EMPTY_FILE(f), "exit 1")}), """#!/usr/bin/env python3
+    promise([FOR_ALL("f", ITER("*_fastp.json"), {f -> IF_THEN(EMPTY_FILE(f), "exit 1")}), FOR_ALL("f", ITER("*.trimmed.fastq"), {f -> IF_THEN(EMPTY_FILE(f), "exit 1")}), """exit 0
 import json
 import sys
 import os
@@ -47,7 +47,7 @@ with open(file) as log:
         summary = j_dict["summary"]
         reads_before = summary["before_filtering"]["total_reads"]
         reads_after = summary["after_filtering"]["total_reads"]
-        sys.exit(1 if (reads_before - reads_after) / reads_before > 0.95 else 0)""", """#!/usr/bin/env python3
+        sys.exit(1 if (reads_before - reads_after) / reads_before > 0.95 else 0)""", """exit 0
 import sys
 import os
 
