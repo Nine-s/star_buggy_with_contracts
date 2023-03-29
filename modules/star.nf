@@ -9,15 +9,7 @@ process STAR_INDEX_REFERENCE {
     output:
     path("star/*")
 
-    require(["""#!/usr/bin/env python3
-import sys
-import os
-
-for file in [f for f in os.listdir() if f.endswith(".fa")]:
-        with open(file) as f:
-                for line in f:
-                        if line[0] not in [">", "A", "C", "T", "G", "U", "N", ";"]:
-                                sys.exit(1)"""])
+    require([FOR_ALL("f", ITER("*.fa"), { f -> IF_THEN(COND("grep -Ev '^[>ACTGUN;]' $f"), "exit 1") })])
     promise([COMMAND_LOGGED_NO_ERROR(), INPUTS_NOT_CHANGED()])
 
     script:
